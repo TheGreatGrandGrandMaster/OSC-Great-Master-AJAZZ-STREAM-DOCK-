@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head lang="en">
+  <meta charset="utf-8" />
+  <title>OSC great Master - Knob Triple</title>
+  <link rel="stylesheet" href="https://sdpi-components.dev/releases/v3/sdpi.css">
+  <script src="https://sdpi-components.dev/releases/v3/sdpi-components.js"></script>
+  <style>
+    /* High-contrast theme */
+    body { background:#0b0b0c; color:#f2f2f5; }
+    .sdpi-wrapper { padding: 10px 12px; }
+    .sdpi-item-label { color:#f2f2f5 !important; font-weight:600; }
+    .sdpi-item-value input, .sdpi-item-value select, input.sdpi-item-value, select.sdpi-item-value {
+      background:#17171a !important; color:#ffffff !important;
+      border:1px solid #6a6a72 !important; border-radius:8px !important;
+      padding:6px 8px !important;
+    }
+    .hint { font-size:12px; color:#c9c9cf; margin: 6px 0 10px; line-height:1.35; }
+    .section-title { margin: 12px 0 6px; font-size: 12px; color:#c9c9cf; text-transform: uppercase; letter-spacing:.06em; }
+    .box { border:1px solid #2b2b31; border-radius:10px; padding:10px; margin:8px 0; background:#0f0f12; }
+    .row2 { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+    .row3 { display:grid; grid-template-columns: 1fr 1fr 1fr; gap:8px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body>
+  <div class="sdpi-wrapper">
+
+    <div class="hint">
+      Αυτό το action στέλνει OSC από ένα knob: αριστερά (CCW), δεξιά (CW) και πάτημα (press).
+    </div>
+
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Receiver mode</div>
+      <select class="sdpi-item-value" id="receiverMode">
+        <option value="same">Same receiver (1 IP / 1 Port)</option>
+        <option value="different">Different receivers (per OSC)</option>
+      </select>
+    </div>
+
+    <div id="globalReceiver" class="box">
+      <div class="section-title">Receiver</div>
+      <div class="row2">
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">IP</div>
+          <input class="sdpi-item-value mono" id="globalIp" placeholder="127.0.0.1" />
+        </div>
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">Port</div>
+          <input class="sdpi-item-value mono" id="globalPort" type="number" placeholder="8000" />
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">Left (CCW)</div>
+
+      <div id="leftReceiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">IP</div>
+          <input class="sdpi-item-value mono" id="leftIp" placeholder="127.0.0.1" />
+        </div>
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">Port</div>
+          <input class="sdpi-item-value mono" id="leftPort" type="number" placeholder="8000" />
+        </div>
+      </div>
+
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">OSC Path</div>
+        <input class="sdpi-item-value mono" id="leftPath" placeholder="/left" />
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">Right (CW)</div>
+
+      <div id="rightReceiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">IP</div>
+          <input class="sdpi-item-value mono" id="rightIp" placeholder="127.0.0.1" />
+        </div>
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">Port</div>
+          <input class="sdpi-item-value mono" id="rightPort" type="number" placeholder="8000" />
+        </div>
+      </div>
+
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">OSC Path</div>
+        <input class="sdpi-item-value mono" id="rightPath" placeholder="/right" />
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">Press</div>
+
+      <div id="pressReceiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">IP</div>
+          <input class="sdpi-item-value mono" id="pressIp" placeholder="127.0.0.1" />
+        </div>
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">Port</div>
+          <input class="sdpi-item-value mono" id="pressPort" type="number" placeholder="8000" />
+        </div>
+      </div>
+
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">OSC Path</div>
+        <input class="sdpi-item-value mono" id="pressPath" placeholder="/press" />
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">Rotate payload</div>
+
+      <div class="sdpi-item">
+        <div class="sdpi-item-label">Send ticks as value</div>
+        <input class="sdpi-item-value" type="checkbox" id="sendTicksAsValue" />
+      </div>
+
+      <div class="sdpi-item">
+        <div class="sdpi-item-label">Tick multiplier</div>
+        <input class="sdpi-item-value mono" id="tickMultiplier" type="number" step="1" placeholder="1" />
+      </div>
+
+      <div class="hint">
+        Αν είναι ενεργό, στο <b>Rotate</b> στέλνουμε 1 αριθμητικό argument (|ticks| * multiplier).
+        Το <b>Press</b> στέλνεται πάντα χωρίς arguments.
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let websocket;
+    let uuid;
+    let context;
+    let settings = {};
+
+    function sendToPlugin(payload) {
+      if (!websocket || websocket.readyState !== 1) return;
+      websocket.send(JSON.stringify(payload));
+    }
+
+    function setSettings(newSettings) {
+      settings = { ...(settings || {}), ...(newSettings || {}) };
+      sendToPlugin({ event: "setSettings", context, payload: settings });
+    }
+
+    function applyReceiverMode(mode) {
+      const showDifferent = mode === "different";
+      document.getElementById("globalReceiver").style.display = showDifferent ? "none" : "";
+      document.getElementById("leftReceiver").style.display = showDifferent ? "grid" : "none";
+      document.getElementById("rightReceiver").style.display = showDifferent ? "grid" : "none";
+      document.getElementById("pressReceiver").style.display = showDifferent ? "grid" : "none";
+    }
+
+    function gatherSettings() {
+      const receiverMode = document.getElementById("receiverMode").value;
+
+      const s = {
+        receiverMode,
+        globalIp: document.getElementById("globalIp").value || "127.0.0.1",
+        globalPort: parseInt(document.getElementById("globalPort").value || "8000", 10),
+
+        leftPath: document.getElementById("leftPath").value || "/left",
+        rightPath: document.getElementById("rightPath").value || "/right",
+        pressPath: document.getElementById("pressPath").value || "/press",
+
+        leftIp: document.getElementById("leftIp").value || "",
+        leftPort: parseInt(document.getElementById("leftPort").value || "0", 10) || 0,
+        rightIp: document.getElementById("rightIp").value || "",
+        rightPort: parseInt(document.getElementById("rightPort").value || "0", 10) || 0,
+        pressIp: document.getElementById("pressIp").value || "",
+        pressPort: parseInt(document.getElementById("pressPort").value || "0", 10) || 0,
+
+        sendTicksAsValue: !!document.getElementById("sendTicksAsValue").checked,
+        tickMultiplier: parseInt(document.getElementById("tickMultiplier").value || "1", 10) || 1
+      };
+
+      return s;
+    }
+
+    function bindInputs() {
+      const ids = [
+        "receiverMode",
+        "globalIp","globalPort",
+        "leftIp","leftPort","leftPath",
+        "rightIp","rightPort","rightPath",
+        "pressIp","pressPort","pressPath",
+        "sendTicksAsValue","tickMultiplier"
+      ];
+
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        const evt = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" : "input";
+        el.addEventListener(evt, () => {
+          if (id === "receiverMode") applyReceiverMode(el.value);
+          setSettings(gatherSettings());
+        });
+      });
+    }
+
+    window.connectElgatoStreamDeckSocket = function(port, inUuid, registerEvent, info, actionInfo) {
+      uuid = inUuid;
+      context = uuid;
+
+      try {
+        const actionData = JSON.parse(actionInfo);
+        settings = actionData.payload && actionData.payload.settings ? actionData.payload.settings : {};
+      } catch (e) {
+        settings = {};
+      }
+
+      websocket = new WebSocket(`ws://localhost:${port}`);
+      websocket.onopen = function() {
+        sendToPlugin({ event: registerEvent, uuid });
+        sendToPlugin({ event: "getSettings", context });
+      };
+
+      websocket.onmessage = function(evt) {
+        const msg = JSON.parse(evt.data);
+        if (msg.event === "didReceiveSettings") {
+          settings = msg.payload && msg.payload.settings ? msg.payload.settings : {};
+
+          // defaults
+          const receiverMode = settings.receiverMode || "same";
+          document.getElementById("receiverMode").value = receiverMode;
+          applyReceiverMode(receiverMode);
+
+          document.getElementById("globalIp").value = settings.globalIp || settings.clientAddress || settings.ip || "127.0.0.1";
+          document.getElementById("globalPort").value = settings.globalPort || settings.clientPort || settings.port || 8000;
+
+          document.getElementById("leftPath").value = settings.leftPath || settings.pathLeft || "/left";
+          document.getElementById("rightPath").value = settings.rightPath || settings.pathRight || "/right";
+          document.getElementById("pressPath").value = settings.pressPath || settings.pathPress || "/press";
+
+          document.getElementById("leftIp").value = settings.leftIp || "";
+          document.getElementById("leftPort").value = settings.leftPort || 0;
+          document.getElementById("rightIp").value = settings.rightIp || "";
+          document.getElementById("rightPort").value = settings.rightPort || 0;
+          document.getElementById("pressIp").value = settings.pressIp || "";
+          document.getElementById("pressPort").value = settings.pressPort || 0;
+
+          document.getElementById("sendTicksAsValue").checked = !!settings.sendTicksAsValue;
+          document.getElementById("tickMultiplier").value = settings.tickMultiplier || 1;
+        }
+      };
+
+      bindInputs();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head lang="en">
+  <meta charset="utf-8" />
+  <title>OSC great Master - Quad Press</title>
+  <link rel="stylesheet" href="https://sdpi-components.dev/releases/v3/sdpi.css">
+  <script src="https://sdpi-components.dev/releases/v3/sdpi-components.js"></script>
+  <style>
+    body { background:#0b0b0c; color:#f2f2f5; }
+    .sdpi-wrapper { padding: 10px 12px; }
+    .sdpi-item-label { color:#f2f2f5 !important; font-weight:600; }
+    .sdpi-item-value input, .sdpi-item-value select, input.sdpi-item-value, select.sdpi-item-value {
+      background:#17171a !important; color:#ffffff !important;
+      border:1px solid #6a6a72 !important; border-radius:8px !important;
+      padding:6px 8px !important;
+    }
+    .hint { font-size:12px; color:#c9c9cf; margin: 6px 0 10px; line-height:1.35; }
+    .section-title { margin: 12px 0 6px; font-size: 12px; color:#c9c9cf; text-transform: uppercase; letter-spacing:.06em; }
+    .box { border:1px solid #2b2b31; border-radius:10px; padding:10px; margin:8px 0; background:#0f0f12; }
+    .row2 { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body>
+  <div class="sdpi-wrapper">
+
+    <div class="hint">
+      Αυτό το action στέλνει μέχρι 4 OSC μηνύματα σε ένα press (Down ή Up).
+    </div>
+
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Send on</div>
+      <select class="sdpi-item-value" id="sendOn">
+        <option value="down">Key Down</option>
+        <option value="up">Key Up</option>
+      </select>
+    </div>
+
+    <div class="sdpi-item">
+      <div class="sdpi-item-label">Receiver mode</div>
+      <select class="sdpi-item-value" id="receiverMode">
+        <option value="same">Same receiver (1 IP / 1 Port)</option>
+        <option value="different">Different receivers (per OSC)</option>
+      </select>
+    </div>
+
+    <div id="globalReceiver" class="box">
+      <div class="section-title">Receiver</div>
+      <div class="row2">
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">IP</div>
+          <input class="sdpi-item-value mono" id="globalIp" placeholder="127.0.0.1" />
+        </div>
+        <div class="sdpi-item" style="margin:0">
+          <div class="sdpi-item-label">Port</div>
+          <input class="sdpi-item-value mono" id="globalPort" type="number" placeholder="8000" />
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">OSC #1</div>
+      <div id="m1Receiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">IP</div><input class="sdpi-item-value mono" id="m1Ip" placeholder="127.0.0.1" /></div>
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">Port</div><input class="sdpi-item-value mono" id="m1Port" type="number" placeholder="8000" /></div>
+      </div>
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">Path</div>
+        <input class="sdpi-item-value mono" id="m1Path" placeholder="/osc/1" />
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">OSC #2</div>
+      <div id="m2Receiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">IP</div><input class="sdpi-item-value mono" id="m2Ip" placeholder="127.0.0.1" /></div>
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">Port</div><input class="sdpi-item-value mono" id="m2Port" type="number" placeholder="8000" /></div>
+      </div>
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">Path</div>
+        <input class="sdpi-item-value mono" id="m2Path" placeholder="/osc/2" />
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">OSC #3</div>
+      <div id="m3Receiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">IP</div><input class="sdpi-item-value mono" id="m3Ip" placeholder="127.0.0.1" /></div>
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">Port</div><input class="sdpi-item-value mono" id="m3Port" type="number" placeholder="8000" /></div>
+      </div>
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">Path</div>
+        <input class="sdpi-item-value mono" id="m3Path" placeholder="/osc/3" />
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="section-title">OSC #4</div>
+      <div id="m4Receiver" class="row2" style="display:none">
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">IP</div><input class="sdpi-item-value mono" id="m4Ip" placeholder="127.0.0.1" /></div>
+        <div class="sdpi-item" style="margin:0"><div class="sdpi-item-label">Port</div><input class="sdpi-item-value mono" id="m4Port" type="number" placeholder="8000" /></div>
+      </div>
+      <div class="sdpi-item" style="margin:8px 0 0">
+        <div class="sdpi-item-label">Path</div>
+        <input class="sdpi-item-value mono" id="m4Path" placeholder="/osc/4" />
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let websocket;
+    let uuid;
+    let context;
+    let settings = {};
+
+    function sendToPlugin(payload) {
+      if (!websocket || websocket.readyState !== 1) return;
+      websocket.send(JSON.stringify(payload));
+    }
+
+    function setSettings(newSettings) {
+      settings = { ...(settings || {}), ...(newSettings || {}) };
+      sendToPlugin({ event: "setSettings", context, payload: settings });
+    }
+
+    function applyReceiverMode(mode) {
+      const showDifferent = mode === "different";
+      document.getElementById("globalReceiver").style.display = showDifferent ? "none" : "";
+      ["m1Receiver","m2Receiver","m3Receiver","m4Receiver"].forEach(id => {
+        document.getElementById(id).style.display = showDifferent ? "grid" : "none";
+      });
+    }
+
+    function gatherSettings() {
+      const receiverMode = document.getElementById("receiverMode").value;
+
+      return {
+        sendOn: document.getElementById("sendOn").value || "down",
+        receiverMode,
+        globalIp: document.getElementById("globalIp").value || "127.0.0.1",
+        globalPort: parseInt(document.getElementById("globalPort").value || "8000", 10),
+
+        m1Path: document.getElementById("m1Path").value || "",
+        m2Path: document.getElementById("m2Path").value || "",
+        m3Path: document.getElementById("m3Path").value || "",
+        m4Path: document.getElementById("m4Path").value || "",
+
+        m1Ip: document.getElementById("m1Ip").value || "",
+        m1Port: parseInt(document.getElementById("m1Port").value || "0", 10) || 0,
+        m2Ip: document.getElementById("m2Ip").value || "",
+        m2Port: parseInt(document.getElementById("m2Port").value || "0", 10) || 0,
+        m3Ip: document.getElementById("m3Ip").value || "",
+        m3Port: parseInt(document.getElementById("m3Port").value || "0", 10) || 0,
+        m4Ip: document.getElementById("m4Ip").value || "",
+        m4Port: parseInt(document.getElementById("m4Port").value || "0", 10) || 0
+      };
+    }
+
+    function bindInputs() {
+      const ids = [
+        "sendOn","receiverMode","globalIp","globalPort",
+        "m1Ip","m1Port","m1Path",
+        "m2Ip","m2Port","m2Path",
+        "m3Ip","m3Port","m3Path",
+        "m4Ip","m4Port","m4Path"
+      ];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const evt = (el.type === "checkbox" || el.tagName === "SELECT") ? "change" : "input";
+        el.addEventListener(evt, () => {
+          if (id === "receiverMode") applyReceiverMode(el.value);
+          setSettings(gatherSettings());
+        });
+      });
+    }
+
+    window.connectElgatoStreamDeckSocket = function(port, inUuid, registerEvent, info, actionInfo) {
+      uuid = inUuid;
+      context = uuid;
+
+      try {
+        const actionData = JSON.parse(actionInfo);
+        settings = actionData.payload && actionData.payload.settings ? actionData.payload.settings : {};
+      } catch (e) {
+        settings = {};
+      }
+
+      websocket = new WebSocket(`ws://localhost:${port}`);
+      websocket.onopen = function() {
+        sendToPlugin({ event: registerEvent, uuid });
+        sendToPlugin({ event: "getSettings", context });
+      };
+
+      websocket.onmessage = function(evt) {
+        const msg = JSON.parse(evt.data);
+        if (msg.event === "didReceiveSettings") {
+          settings = msg.payload && msg.payload.settings ? msg.payload.settings : {};
+
+          document.getElementById("sendOn").value = settings.sendOn || "down";
+
+          const receiverMode = settings.receiverMode || "same";
+          document.getElementById("receiverMode").value = receiverMode;
+          applyReceiverMode(receiverMode);
+
+          document.getElementById("globalIp").value = settings.globalIp || "127.0.0.1";
+          document.getElementById("globalPort").value = settings.globalPort || 8000;
+
+          ["m1Path","m2Path","m3Path","m4Path"].forEach(id => {
+            document.getElementById(id).value = settings[id] || "";
+          });
+          ["m1Ip","m2Ip","m3Ip","m4Ip"].forEach(id => {
+            document.getElementById(id).value = settings[id] || "";
+          });
+          ["m1Port","m2Port","m3Port","m4Port"].forEach(id => {
+            document.getElementById(id).value = settings[id] || 0;
+          });
+        }
+      };
+
+      bindInputs();
+    };
+  </script>
+</body>
+</html>

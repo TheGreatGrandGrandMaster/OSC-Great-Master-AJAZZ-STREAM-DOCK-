@@ -1,0 +1,65 @@
+{
+  "$schema": "https://schemas.elgato.com/streamdeck/plugins/manifest.json",
+  "UUID": "gptcom.oscremote",
+  "Name": "OSC great Master",
+  "Version": "1.2.4",
+  "Description": "OSC great Master: Knob + buttons OSC control",
+  "Author": "gpt",
+  "Icon": "imgs/pluginIcon",
+  "CodePath": "bin/plugin.js",
+  "SDKVersion": 2,
+  "Category": "OSC great Master",
+  "CategoryIcon": "imgs/pluginIcon",
+  "Actions": [
+    {
+      "UUID": "gptcom.oscremote.knobtriple",
+      "Name": "Dial OSC Great Master",
+      "Tooltip": "Dial OSC Great Master - Send left/right/press OSC with optional per-message receiver.",
+      "Icon": "imgs/knob-action",
+      "PropertyInspectorPath": "ui/knob.html",
+      "Controllers": [
+        "Knob"
+      ],
+      "States": [
+        {
+          "Title": "",
+          "Image": "imgs/knob-action",
+          "ShowTitle": true,
+          "TitleAlignment": "bottom",
+          "FontSize": 12
+        }
+      ]
+    },
+    {
+      "UUID": "gptcom.oscremote.quadpress",
+      "Name": "Button OSC Great Master",
+      "Tooltip": "Button OSC Great Master - Send up to 4 OSC messages on press.",
+      "Icon": "imgs/quad-action",
+      "PropertyInspectorPath": "ui/quad.html",
+      "Controllers": [
+        "Keypad"
+      ],
+      "States": [
+        {
+          "Title": "",
+          "Image": "imgs/quad-action",
+          "ShowTitle": true,
+          "TitleAlignment": "bottom",
+          "FontSize": 12
+        }
+      ]
+    }
+  ],
+  "Software": {
+    "MinimumVersion": "2.0"
+  },
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ],
+  "Nodejs": {
+    "Version": "20"
+  }
+}
