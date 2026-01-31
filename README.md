@@ -42,6 +42,31 @@ A Stream Dock (AJAZZ Global / HotSpot StreamDock) plugin that sends **custom OSC
   - Check Windows Firewall rules for your OSC receiver.
   - Verify you are on the correct network interface.
   - Try `127.0.0.1` only if the receiver runs on the same PC.
+  
+If the plugin works on one PC but won’t start on another, it’s usually because the release ZIP was built without bundling the `ws` dependency.
+
+**Goal:** make sure this path exists inside the plugin package:
+`<yourPlugin>.sdPlugin\bin\node_modules\ws\`
+
+### Requirements (build machine only)
+- Windows + **Node.js LTS** (includes `npm`)
+> End users do **NOT** need Node.js if the ZIP is self-contained.
+
+### Steps (PowerShell)
+
+1) Extract the plugin ZIP so you have a folder ending in `.sdPlugin`.
+
+2) Open PowerShell inside:
+`<yourPlugin>.sdPlugin\bin\`
+
+3) Run:
+
+```powershell
+# Create package.json only if missing
+if (-not (Test-Path .\package.json)) { npm init -y }
+
+# Install the required dependency inside the plugin package
+npm install ws --omit=dev
 
 ## Libraries / tech used
 - JavaScript (Node runtime provided by StreamDock/AJAZZ)
